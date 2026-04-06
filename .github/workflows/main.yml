@@ -1,38 +1,37 @@
-name: Store-X-Server
+name: Store-X-Serverless-Lambda
 
 on: 
     push :
         branches: [ main , test ]
 
+permissions:
+    id-token: write
+    contents: read
+
 jobs: 
+
  Server-Prodction-Job:
   runs-on: ubuntu-latest
   environment : "PROD"
   env :
-    EC2_ip : ${{secrets.EC2_IP}}
-    ssh_private_key : ${{secrets.EC2_PRIVATE_KEY}}
-    username : ${{secrets.EC2_USERNAME}}
-    port : ${{secrets.PORT}}
-    pm2_instace : ${{secrets.PM2_INSTACE}}
-
+      IAM_ROLE: ${{secrets.IAM_ROLE}}
+      LAMBDA_FUNCTION_NAME: ${{secrets.LAMBDA_FUNCTION_NAME}}
+      REGION: ${{secrets.REGION}}
 
   steps:
-      - name: Action SSH
-        id: action-ssh
-        uses: tiyee/action-ssh@v1.0.1
-        with:
-          host: ${{ env.EC2_ip}} 
-          port: ${{env.port}}
-          username: ${{ env.username}} 
-          privateKey: ${{ env.ssh_private_key }} 
-          command: |
-            set -e
-            cd /home/ubuntu/StoreX_Server_Backup
-            echo "pulling the code form git repo"
-            git pull
-            echo "installing packages"
-            npm ci
-            echo "reload the pm2"
-            echo $pm2_instace
-            pm2 reload storageApp
-          
+
+
+   - name: Configure the aws credentials
+     uses: aws-actions/configure-aws-credentials@v4
+     with:
+        role-to-assume: ${{ env.IAM_ROLE }}
+        aws-region: ${{ env.REGION}}
+
+
+   - name: Deploy Lambda Function
+     uses: aws-actions/aws-lambda-deploy@v1.1.0
+     with:
+        function-name: ${{env.LAMBDA_FUNCTION_NAME}}
+        code-artifacts-dir: .
+        handler: index.handler
+        runtime: nodejs22.x
