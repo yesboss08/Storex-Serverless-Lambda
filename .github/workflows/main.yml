@@ -20,6 +20,13 @@ jobs:
 
   steps:
 
+   - name: cheeckout the git repo
+     uses: actions/checkout@v6
+
+
+   - name: install the packages
+     run: npm ci
+
 
    - name: Configure the aws credentials
      uses: aws-actions/configure-aws-credentials@v4
