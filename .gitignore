@@ -1,0 +1,8 @@
+.env
+node_modules
+todo.md
+storage
+utils/Aws/aws_keys.ssh
+.ssh.pub
+.ssh
+.ssh.pub

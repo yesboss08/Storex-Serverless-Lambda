@@ -1,0 +1,38 @@
+name: Store-X-Server
+
+on: 
+    push :
+        branches: [ main , test ]
+
+jobs: 
+ Server-Prodction-Job:
+  runs-on: ubuntu-latest
+  environment : "PROD"
+  env :
+    EC2_ip : ${{secrets.EC2_IP}}
+    ssh_private_key : ${{secrets.EC2_PRIVATE_KEY}}
+    username : ${{secrets.EC2_USERNAME}}
+    port : ${{secrets.PORT}}
+    pm2_instace : ${{secrets.PM2_INSTACE}}
+
+
+  steps:
+      - name: Action SSH
+        id: action-ssh
+        uses: tiyee/action-ssh@v1.0.1
+        with:
+          host: ${{ env.EC2_ip}} 
+          port: ${{env.port}}
+          username: ${{ env.username}} 
+          privateKey: ${{ env.ssh_private_key }} 
+          command: |
+            set -e
+            cd /home/ubuntu/StoreX_Server_Backup
+            echo "pulling the code form git repo"
+            git pull
+            echo "installing packages"
+            npm ci
+            echo "reload the pm2"
+            echo $pm2_instace
+            pm2 reload storageApp
+          
