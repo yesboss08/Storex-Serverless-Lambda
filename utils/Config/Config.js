@@ -1,10 +1,13 @@
 import { config } from "dotenv";
+import { SecretsManagerClient, GetSecretValueCommand } from "@aws-sdk/client-secrets-manager";
 
-config();
+if(!process.env.AWS_LAMBDA_FUNCTION_NAME){
+  config()
+}
 
-export const Config = {
+export let Config = {
   PORT: process.env.PORT,
-  AllowedClient1: process.env.ALLOWED_CLIENT_1,
+  ALLOWED_CLIENT_1: process.env.ALLOWED_CLIENT_1,
   AllowedClient2: process.env.ALLOWED_CLIENT_2,
   MongoDB_URL: process.env.MongoDB_URL,
   Cookie_Secreate: process.env.Cookie_Secreate,
@@ -28,5 +31,17 @@ export const Config = {
   AWS_CLOUD_FRONT_keyPairId:process.env.AWS_CLOUD_FRONT_keyPairId,
   AWS_ACCESS_KEY_ID:process.env.AWS_ACCESS_KEY_ID,
 AWS_SECREAT_ACCESS_KEY:process.env.AWS_SECREAT_ACCESS_KEY,
-GIT_WEBHOOK_SCREATE:process.env.GIT_WEBHOOK_SCREATE
+GIT_WEBHOOK_SCREATE:process.env.GIT_WEBHOOK_SCREATE,
 };
+
+
+if(process.env.AWS_LAMBDA_FUNCTION_NAME){
+  const client = new SecretsManagerClient({region:'ap-south-1'})
+  const command = new GetSecretValueCommand(
+    {SecretId:process.env.SecretId}
+)
+const res = await client.send(command)
+const secretString = res.SecretString
+const secrets = JSON.parse(secretString)
+Object.assign(Config, secrets)
+}

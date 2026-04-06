@@ -59,39 +59,44 @@
 
 
 //TEST: for child spawn executing the bash file
- import {spawn} from "child_process"
- import process from "process"
+//  import {spawn} from "child_process"
+//  import process from "process"
 
-const a =[1,2,3]
+// const a =[1,2,3]
 
-const MODE = a.includes(2)
+// const MODE = a.includes(2)
 
-const childStream = spawn('bash', ["bash.sh"],{
-     env: {
-    ...process.env,
-    MODE: MODE
-  }
-})
-
-
-childStream.stdout.on('data', data => {
-  process.stdout.write(data); // mirror to terminal
-});
-
-childStream.on("close", code =>{
-     console.log({code})
-    if(code==0){
-        console.log("process executed successfuly")
-    }else{
-        console.log("error while running the bash file")
-    }
-})
-
-childStream.stderr.on("data",(chunk)=>{
-    process.stderr.write(chunk)
-})
+// const childStream = spawn('bash', ["bash.sh"],{
+//      env: {
+//     ...process.env,
+//     MODE: MODE
+//   }
+// })
 
 
-childStream.on("error" , (err)=>{
-    console.log("error while spwanign the bash file")
-})
+// childStream.stdout.on('data', data => {
+//   process.stdout.write(data); // mirror to terminal
+// });
+
+// childStream.on("close", code =>{
+//      console.log({code})
+//     if(code==0){
+//         console.log("process executed successfuly")
+//     }else{
+//         console.log("error while running the bash file")
+//     }
+// })
+
+// childStream.stderr.on("data",(chunk)=>{
+//     process.stderr.write(chunk)
+// })
+
+
+// childStream.on("error" , (err)=>{
+//     console.log("error while spwanign the bash file")
+// })
+
+
+
+import {Config} from './utils/Config/Config.js'
+console.log(Config)
