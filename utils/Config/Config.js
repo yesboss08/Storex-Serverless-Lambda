@@ -1,11 +1,11 @@
-import { config } from "dotenv";
+import { config as dotenv } from "dotenv";
 import { SecretsManagerClient, GetSecretValueCommand } from "@aws-sdk/client-secrets-manager";
 
 if(!process.env.AWS_LAMBDA_FUNCTION_NAME){
-  config()
+  dotenv()
 }
 
-export let Config = {
+ let Config = {
   PORT: process.env.PORT,
   ALLOWED_CLIENT_1: process.env.ALLOWED_CLIENT_1,
   AllowedClient2: process.env.ALLOWED_CLIENT_2,
@@ -35,8 +35,14 @@ GIT_WEBHOOK_SCREATE:process.env.GIT_WEBHOOK_SCREATE,
 };
 
 
-if(process.env.AWS_LAMBDA_FUNCTION_NAME){
+let cachedConfig = {}
+
+const LoadConfig = async ()=>{
+  if(cachedConfig) return cachedConfig
+
+try {
   const client = new SecretsManagerClient({region:'ap-south-1'})
+  console.log(process.env.SecretId)
   const command = new GetSecretValueCommand(
     {SecretId:process.env.SecretId}
 )
@@ -44,4 +50,19 @@ const res = await client.send(command)
 const secretString = res.SecretString
 const secrets = JSON.parse(secretString)
 Object.assign(Config, secrets)
+return Config
+} catch (error) {
+  console.log("error in cofig file",error)
+  throw error
 }
+}
+
+ if(process.env.AWS_LAMBDA_FUNCTION_NAME && !cachedConfig){
+ cachedConfig = await LoadConfig()
+ }
+
+
+ export {Config}
+
+
+

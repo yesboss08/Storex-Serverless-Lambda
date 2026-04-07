@@ -3,4 +3,9 @@ import ServerlessHttp from "serverless-http";
 import app from './app.js'
 
 
-export const handler = ServerlessHttp(app)
+const proxyHandler = ServerlessHttp(app)
+
+export const handler = async(event, context)=>{
+    context.callbackWaitsForEmptyEventLoop = false;
+    proxyHandler()
+}
