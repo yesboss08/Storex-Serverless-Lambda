@@ -41,6 +41,7 @@ const LoadConfig = async ()=>{
   if(cachedConfig) return cachedConfig
 
 try {
+  console.log("inside Loadconfig function")
   const client = new SecretsManagerClient({region:'ap-south-1'})
   console.log(process.env.SecretId)
   const command = new GetSecretValueCommand(
@@ -58,7 +59,9 @@ return Config
 }
 
  if(process.env.AWS_LAMBDA_FUNCTION_NAME && !cachedConfig){
+  console.log("inside lambda env")
  cachedConfig = await LoadConfig()
+ console.log({cachedConfig, Config})
  }
 
 
