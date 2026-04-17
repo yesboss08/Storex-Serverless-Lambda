@@ -14,7 +14,7 @@ const GetENV = ()=>{
       let envVars = {
   PORT: process.env.PORT,
   ALLOWED_CLIENT_1: process.env.ALLOWED_CLIENT_1,
-  AllowedClient2: process.env.ALLOWED_CLIENT_2,
+  ALLOWED_CLIENT_2: process.env.ALLOWED_CLIENT_2,
   MongoDB_URL: process.env.MongoDB_URL,
   Cookie_Secreate: process.env.Cookie_Secreate,
   Redis_DB_Password: process.env.Redis_DB_Password,

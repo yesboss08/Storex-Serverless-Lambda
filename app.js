@@ -16,7 +16,7 @@ await connectDB()
 
 
 const AloowedOrigin = [
-    Config.ALLOWED_CLIENT_1, Config.AllowedClient2
+    Config.ALLOWED_CLIENT_1, Config?.ALLOWED_CLIENT_2
 ]
 
 
@@ -25,7 +25,9 @@ const port = Config.PORT || 4000
 
 try {
 app.use(cors({
+  
     origin: function(origin , cb){
+      console.log(AloowedOrigin)
         if(!origin || AloowedOrigin.includes(origin)){
             cb(null , true)
         }else{
