@@ -7,9 +7,7 @@ import userRouter from "./routes/userRoutes.js"
 import cookieParser from "cookie-parser"
 import { ConnectRedis } from "./DB/redisDB.js"
 import GoogleDriveRouter from "./routes/googleDrive.js"
-import RazorpayRouter from './routes/razorpay.js'
 import { Config } from "./utils/Config/Config.js"
-import GitWebHookRouter from './routes/gitWebhook.js'
 import {connectDB} from "./Models/db.js"
 
 const redisClient = await ConnectRedis()
@@ -47,16 +45,13 @@ app.use(express.json({
 app.use(cookieParser(Config.Cookie_Secreate))
 
   app.get("/",(req,res)=>{
- return   res.json({Config})
-    // res.json({msg:"hello from mostorage app ✅✅  "})
+    return res.json({msg:"hello from mostorage app ✅✅  ", domain:Config.ALLOWED_CLIENT_1})
   })
 
 app.use("/directory",CheeckAuth, directoryRouter)
 app.use("/file",CheeckAuth, fileRouter)
 app.use("/user",userRouter )
 app.use("/drive", CheeckAuth,GoogleDriveRouter)
-// app.use("/razorpay",RazorpayRouter )
-// app.use("/GitWebhook", GitWebHookRouter)
 
 app.use((err, req, res, next) => {
   console.error(err.stack); // log for debugging
