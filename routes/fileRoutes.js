@@ -59,7 +59,7 @@ router.post("/uploads/initiate", async (req, res, next) => {
     extension: extension,
     isPaid: usedStorage > Config.Default_Max_Storage_In_Bytes ? true : false,
     parent: parentId,
-    path: filePath,
+    path: filePath,userId:userData?.userId
   });
   //create the post singed url
   const postUrl = await CreatePutSignedUrl({

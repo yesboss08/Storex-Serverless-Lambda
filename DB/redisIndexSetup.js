@@ -1,5 +1,5 @@
 import { createClient } from "redis";
-import { Config } from "../utils/Config/config";
+import { Config } from "../utils/Config/Config";
 
 const redisClient = createClient({
   password: Config.Redis_DB_Password,

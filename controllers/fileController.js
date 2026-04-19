@@ -96,6 +96,7 @@ export const CreateFile = async (req, res, next) => {
     //if file transfer failed
     writableStream.on("error", async (err) => {
       await fileModel.deleteOne({ _id: fileRes._id });
+      //todo:cheeck is it requried in s3 intergrated
       await fs.rm(`./storage/${fileRes._id}${fileRes.extension}`, {
         recursive: true,
       });

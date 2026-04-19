@@ -1,4 +1,4 @@
-import redisClient from "../DB/redisDB.js";
+import { redisClient } from "../DB/redisDB.js";
 
 const CheeckAuth = async (req, res, next) => {
     const { sid } = req?.signedCookies;

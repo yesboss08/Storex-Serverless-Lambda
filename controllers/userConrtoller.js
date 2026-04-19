@@ -4,7 +4,7 @@ import directoryModel from "../Models/directoryModel.js"
 import bcrypt from 'bcrypt'
 import SessionModel from '../Models/Sessions.js'
 import { VarifyIdToken } from "../utils/googleOauth.js"
-import redisClient from '../DB/redisDB.js'
+import {redisClient} from '../DB/redisDB.js'
 import { randomBytes } from 'crypto'
 import { isAllowedToRoleChange } from '../utils/permission/permission.js'
 import { AllPlansInfo } from '../utils/Constant/StoragePlans.js'

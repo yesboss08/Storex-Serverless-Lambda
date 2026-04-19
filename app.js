@@ -10,9 +10,11 @@ import GoogleDriveRouter from "./routes/googleDrive.js"
 import { Config } from "./utils/Config/Config.js"
 import {connectDB} from "./Models/db.js"
 
+//not calling in the serverless enviroment
+if(!process.env?.AWS_LAMBDA_FUNCTION_NAME){
 const redisClient = await ConnectRedis()
-
 await connectDB()
+}
 
 
 const AloowedOrigin = [
@@ -27,7 +29,6 @@ try {
 app.use(cors({
   
     origin: function(origin , cb){
-      console.log(AloowedOrigin)
         if(!origin || AloowedOrigin.includes(origin)){
             cb(null , true)
         }else{
@@ -47,7 +48,7 @@ app.use(express.json({
 app.use(cookieParser(Config.Cookie_Secreate))
 
   app.get("/",(req,res)=>{
-    return res.json({msg:"hello from mostorage app ✅✅  ", domain:Config.ALLOWED_CLIENT_1})
+    return res.json({msg:"hello from mostorage app ✅✅  "})
   })
 
 app.use("/directory",CheeckAuth, directoryRouter)
